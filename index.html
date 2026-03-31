@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaxia Global - Comunidad</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body oncontextmenu="return false;">
+    
+    <div id="ui">
+        <div class="stat-header">SISTEMA GALÁCTICO PROTEGIDO</div>
+        <div class="stat-main">ASTROS: <span id="counter">0</span></div>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Buscar astro...">
+            <button id="search-btn">VIAJAR</button>
+        </div>
+        <button id="add-btn" class="primary-btn">+ REGISTRAR MI NOMBRE</button>
+    </div>
+
+    <div id="donation-panel">
+        <button id="donate-btn">🎁 APOYAR PROYECTO</button>
+    </div>
+
+    <div id="register-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>NUEVO REGISTRO</h2>
+            <p>Tu nombre será una estrella eterna.</p>
+            <input type="text" id="follower-name-input" placeholder="Tu nombre..." maxlength="15">
+            <button id="confirm-btn" class="primary-btn">CONFIRMAR</button>
+            <button id="cancel-btn" style="background:none; color:gray; margin-top:10px; cursor:pointer;">CANCELAR</button>
+        </div>
+    </div>
+
+    <div id="donate-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>APOYAR LA GALAXIA</h2>
+            <p>Monto de tu aporte (USD):</p>
+            <input type="number" id="donate-amount" value="5.00" min="1" step="1" 
+                   style="width: 100px; padding: 10px; margin-bottom: 20px; text-align: center; font-size: 1.2rem; background: #222; color: #fff; border: 1px solid #444;">
+            
+            <div id="paypal-button-container"></div>
+            <button id="close-donate" style="margin-top:20px; background:none; color:gray; cursor:pointer;">CERRAR</button>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+            "@tweenjs/tween.js": "https://unpkg.com/@tweenjs/tween.js@21.0.0/dist/tween.esm.js"
+        }
+    }
+    </script>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=TU_CLIENT_ID_AQUÍ&currency=USD"></script>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
