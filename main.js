@@ -34,7 +34,7 @@ const followersGroup = new THREE.Group();
 scene.add(followersGroup);
 let dataBase = {};
 
-// FONDO
+// --- FONDO DE NEBULOSA ---
 const skyGeo = new THREE.SphereGeometry(30000, 32, 32);
 const skyMat = new THREE.ShaderMaterial({
     uniforms: { c1: { value: new THREE.Color(0x1a0033) }, c2: { value: new THREE.Color(0x000205) } },
@@ -44,6 +44,14 @@ const skyMat = new THREE.ShaderMaterial({
 });
 scene.add(new THREE.Mesh(skyGeo, skyMat));
 
+// --- ESTRELLAS BLANCAS DE FONDO ---
+const starGeo = new THREE.BufferGeometry();
+const starPos = new Float32Array(15000 * 3);
+for(let i=0; i<45000; i++) starPos[i] = (Math.random() - 0.5) * 35000;
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2, transparent: true, opacity: 0.8 });
+scene.add(new THREE.Points(starGeo, starMaterial));
+
 // --- FUNCIONES ---
 function crearAstroVisual(name, x, y, z, color, esNuevo) {
     const id = name.trim().toLowerCase().replace(/[^a-z0-9]/g, "_");
@@ -51,14 +59,17 @@ function crearAstroVisual(name, x, y, z, color, esNuevo) {
     const container = new THREE.Group();
     const astro = new THREE.Mesh(new THREE.SphereGeometry(35, 24, 24), new THREE.MeshBasicMaterial({ color: color }));
     container.add(astro);
+    
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = 512; canvas.height = 128;
     ctx.fillStyle = 'white'; ctx.font = 'Bold 52px Arial'; ctx.textAlign = 'center';
     ctx.fillText(name.toUpperCase(), 256, 80);
+    
     const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true }));
     sprite.scale.set(240, 60, 1); sprite.position.y = -90;
     container.add(sprite);
+    
     container.position.set(x, y, z);
     followersGroup.add(container);
     dataBase[id] = { container };
@@ -72,7 +83,9 @@ onChildAdded(astrosRef, (snapshot) => {
 
 document.getElementById('confirm-btn').addEventListener('click', async () => {
     const n = document.getElementById('follower-name-input').value.trim();
-    if (!n || localStorage.getItem('user_has_astro')) return alert("¡Ya tienes un astro en la galaxia! No puedes registrar más de uno desde el mismo dispositivo.");
+    if (localStorage.getItem('user_has_astro')) return alert("¡Ya tienes un astro! No puedes registrar más de uno.");
+    if (!n) return alert("Por favor ingresa un nombre.");
+
     const idLimpio = n.toLowerCase().replace(/[^a-z0-9]/g, "_");
     const nuevoAstroRef = ref(db, 'astros/' + idLimpio);
     try {
